@@ -43,7 +43,7 @@ Email: {email}
 Current Occupation: {occupation}.
 With Regards,
 The hiring team"""
-        send_mail("Job Application", content)
+        send_mail("Job Application", content, email)
         flash(f"{first_name}, your form was submitted successfully!", "success")
         return redirect(url_for("index"))
         

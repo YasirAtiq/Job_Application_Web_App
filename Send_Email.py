@@ -4,13 +4,13 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
-def send_mail(subject: str, message: str):
+def send_mail(subject: str, message: str, email: str):
     host = "smtp.gmail.com"
     port = 465
 
     username = os.getenv("USERNAME_1")
     password = os.getenv("PASSWORD")
-    receiver = "yasiratiqmohammed@gmail.com"
+    receiver = email
 
     msg = MIMEMultipart()
     msg['From'] = username
