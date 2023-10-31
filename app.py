@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request
-from datetime import datetime
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from Send_Email import send_mail
+from datetime import datetime
+import os
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "1234"
+app.config["SECRET_KEY"] = os.getenv("MAIN_PWD")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
 db = SQLAlchemy(app)
 
@@ -30,6 +32,20 @@ def index():
                         email=email, date=date, occupation=occupation)
         db.session.add(data)
         db.session.commit()
+        content = f"""
+Dear {first_name + " " + last_name},
+We have recieved your application to join our team. 
+Please come to our interview at {str(date)[:10]}.
+Here are your details:
+First Name: {first_name}
+Last Name: {last_name}
+Email: {email}
+Current Occupation: {occupation}.
+With Regards,
+The hiring team"""
+        send_mail("Job Application", content)
+        flash(f"{first_name}, your form was submitted successfully!", "success")
+        return redirect(url_for("index"))
         
     return render_template("index.html")
 
